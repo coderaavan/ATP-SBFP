@@ -1,0 +1,7 @@
+/results_*
+/tracer/traces
+/.vscode
+/backup_results
+/SPEC2017Traces
+/obj
+/bin
