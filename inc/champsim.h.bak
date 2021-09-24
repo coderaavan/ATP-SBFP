@@ -74,9 +74,10 @@
 #define DP(x)
 #endif
 
-//@Prashant
-//#define SBFP_ENABLE
-//#define ATP
+//ATP+SBFP
+//Uncomment for SBFP and ATP to work
+#define SBFP_ENABLE
+#define ATP
 
 // CPU
 //#define NUM_CPUS 1

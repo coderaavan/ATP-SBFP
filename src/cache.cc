@@ -1965,8 +1965,8 @@ void CACHE::handle_read()
 
           //Control will reach here when a requested PTE is absent in STLB. So SBFP PQ will be checked for PTE
           #ifdef ATP
-          stlb_update_last_vpage(RQ.entry[index].full_virtual_address >> LOG2_PAGE_SIZE); //Defined in atp.stlb_pref. Update last virtual pages to cause TLB miss. Will be used by H2P prefetcher
-          stlb_update_fpq(RQ.entry[index].address << LOG2_PAGE_SIZE, RQ.entry[index].ip); //Defined in atp.stlb_pref. Update FPQ of constituent prefetchers' FPQ on an STLB miss
+          //stlb_update_last_vpage(RQ.entry[index].full_virtual_address >> LOG2_PAGE_SIZE); 
+          //stlb_update_fpq(RQ.entry[index].address << LOG2_PAGE_SIZE, RQ.entry[index].ip); 
           
           int temp_type = LOAD;
 
@@ -1976,7 +1976,7 @@ void CACHE::handle_read()
           stlb_prefetcher_operate(RQ.entry[index].address << LOG2_PAGE_SIZE, //Defined in atp.stlb_pref. Run prefetcher on STLB miss
                                   RQ.entry[index].ip, 0, temp_type,
                                   RQ.entry[index].instr_id,
-                                  RQ.entry[index].instruction);
+                                  RQ.entry[index].instruction, read_cpu);
           stlb_prefetch_flag = false;
           #endif
 
@@ -2015,15 +2015,15 @@ void CACHE::handle_read()
           #endif
           ////End of ATP+SBFP related changes
 
-          int temp_type = LOAD;
+          int temp_type_2 = LOAD;
 
           if (RQ.entry[index].prefetch_translation_merged == true ||
               RQ.entry[index].l1_pq_index != -1)
-            temp_type = PREFETCH;
+            temp_type_2 = PREFETCH;
           stlb_prefetcher_operate(RQ.entry[index].address << LOG2_PAGE_SIZE,
-                                  RQ.entry[index].ip, 0, temp_type,
+                                  RQ.entry[index].ip, 0, temp_type_2,
                                   RQ.entry[index].instr_id,
-                                  RQ.entry[index].instruction);
+                                  RQ.entry[index].instruction, read_cpu);
 
           stlb_prefetch_flag = false;
 
@@ -2716,7 +2716,7 @@ void CACHE::handle_read()
               stlb_prefetcher_operate(RQ.entry[index].address << LOG2_PAGE_SIZE,
                                       RQ.entry[index].ip, 0, temp_type,
                                       RQ.entry[index].instr_id,
-                                      RQ.entry[index].instruction);
+                                      RQ.entry[index].instruction, read_cpu);
             }
           }
 
@@ -2896,7 +2896,7 @@ void CACHE::handle_prefetch()
             stlb_prefetcher_operate(PQ.entry[index].address << LOG2_PAGE_SIZE,
                                     PQ.entry[index].ip, 1, PQ.entry[index].type,
                                     PQ.entry[index].prefetch_id,
-                                    PQ.entry[index].instruction);
+                                    PQ.entry[index].instruction, prefetch_cpu);
             DP(if (warmup_complete[PQ.entry[index].cpu])
                {
                  cout << "[" << NAME << "_PQ] " << __func__
@@ -2993,7 +2993,7 @@ void CACHE::handle_prefetch()
             stlb_prefetcher_operate(PQ.entry[index].address << LOG2_PAGE_SIZE, //Defined in atp.stlb_pref
                                     PQ.entry[index].ip, 1, PQ.entry[index].type,
                                     PQ.entry[index].prefetch_id,
-                                    PQ.entry[index].instruction);
+                                    PQ.entry[index].instruction, prefetch_cpu);
           }
 
           #endif
@@ -3004,7 +3004,7 @@ void CACHE::handle_prefetch()
             stlb_prefetcher_operate(PQ.entry[index].address << LOG2_PAGE_SIZE,
                                     PQ.entry[index].ip, 1, PQ.entry[index].type,
                                     PQ.entry[index].prefetch_id,
-                                    PQ.entry[index].instruction);
+                                    PQ.entry[index].instruction, prefetch_cpu);
           }
         }
 
@@ -3166,7 +3166,7 @@ void CACHE::handle_prefetch()
                         PQ.entry[index].address << LOG2_PAGE_SIZE,
                         PQ.entry[index].ip, 0, PQ.entry[index].type,
                         PQ.entry[index].prefetch_id,
-                        PQ.entry[index].instruction);
+                        PQ.entry[index].instruction, prefetch_cpu);
                     DP(if (warmup_complete[PQ.entry[index].cpu])
                        {
                          cout << "[" << NAME << "_PQ] " << __func__

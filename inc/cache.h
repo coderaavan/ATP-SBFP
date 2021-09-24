@@ -460,7 +460,7 @@ public:
                               uint8_t instruction),
       stlb_prefetcher_operate(uint64_t addr, uint64_t ip, uint8_t cache_hit,
                               uint8_t type, uint64_t prefetch_id,
-                              uint8_t instruction),
+                              uint8_t instruction, uint32_t cpu),
       prefetcher_cache_fill(uint64_t addr, uint32_t set, uint32_t way,
                             uint8_t prefetch, uint64_t evicted_addr),
       l1d_prefetcher_cache_fill(uint64_t v_addr, uint64_t addr, uint32_t set,
@@ -489,13 +489,13 @@ public:
       void stlb_update_fpq(uint64_t addr, uint64_t ip);
       void h2p_operate(uint64_t addr, uint64_t ip,
                 uint8_t cache_hit, uint8_t type,
-                uint64_t prefetch_id, uint8_t instruction),
+                uint64_t prefetch_id, uint8_t instruction, uint32_t cpu),
           stp_operate(uint64_t addr, uint64_t ip,
                 uint8_t cache_hit, uint8_t type,
-                uint64_t prefetch_id, uint8_t instruction),
+                uint64_t prefetch_id, uint8_t instruction, uint32_t cpu),
           masp_operate(uint64_t addr, uint64_t ip,
                 uint8_t cache_hit, uint8_t type,
-                uint64_t prefetch_id, uint8_t instruction);
+                uint64_t prefetch_id, uint8_t instruction, uint32_t cpu);
      void print_atp_stats();
   // Neelu: adding for l1i prefetcher
   void (*l1i_prefetcher_cache_operate)(uint32_t, uint64_t, uint8_t, uint8_t);
